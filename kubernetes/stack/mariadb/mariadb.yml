@@ -1,0 +1,99 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  database
+...
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mariadb-cred
+  namespace: database
+type: Opaque
+data:
+  dbusername: cm9vdA==
+  dbpassword: cm9vdA==
+...
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mariadb
+  namespace: database
+  labels:
+    app: database
+    tier: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: database
+  template:
+    metadata:
+      labels:
+        tier: database
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb
+        volumeMounts:
+          - name:  mariadb-disk
+            mountPath:  /var/lib/mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD 
+            valueFrom:
+              secretKeyRef:
+                key: dbpassword 
+                name: mariadb-cred
+      volumes:
+      - name: mariadb-disk
+        persistentVolumeClaim:
+          claimName: mariadb-disk
+...
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-service
+  namespace: database
+spec:
+  selector:
+    tier: database
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+...
+
+--- 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-disk 
+  namespace: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+... 
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: schema-setup
+  namespace: database
+spec:
+  template:
+    spec:
+      containers:
+      - name: schema-loader
+        image: rkalluru/b36-dbjob:v2
+      restartPolicy: Never
+  backoffLimit: 1
+...

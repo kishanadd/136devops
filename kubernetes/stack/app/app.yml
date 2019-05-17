@@ -1,0 +1,89 @@
+--- 
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  appui
+...
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: appui
+  labels:
+    app: tomcat
+    tier: middleware
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: middleware
+  template:
+    metadata:
+      labels:
+        tier: middleware
+    spec:
+      containers:
+      - name: tomcat
+        image: rkalluru/b36-app:v4
+        env:
+          - name: DBUSER
+            valueFrom:
+              secretKeyRef:
+                key: DBUSER 
+                name: db-secret
+          - name: DBPASS
+            valueFrom:
+              secretKeyRef:
+                key: DBPASS 
+                name: db-secret
+          - name: DBNAME 
+            valueFrom:
+              configMapKeyRef:
+                key: DBNAME
+                name: db-config 
+          - name: DBENDPOINT 
+            valueFrom:
+              configMapKeyRef:
+                key: DBENDPOINT
+                name: db-config
+...
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: appui
+spec:
+  #type: LoadBalancer
+  selector:
+    tier: middleware
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+...
+
+---
+apiVersion: v1
+data:
+  DBENDPOINT: mariadb-service.database.svc.cluster.local
+  DBNAME: studentapp 
+kind: ConfigMap
+metadata:
+  name: db-config
+  namespace: appui
+... 
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+  namespace: appui
+type: Opaque
+data:
+  DBUSER: c3R1ZGVudA==
+  DBPASS: c3R1ZGVudEAx
+... 

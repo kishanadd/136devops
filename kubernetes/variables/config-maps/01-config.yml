@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+data:
+  NAME: DEVOPS
+  TYPE: ONLINE
+kind: ConfigMap
+metadata:
+  name: course-config
+... 
+
+--- 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: centos
+    image: centos
+    command: ['sleep', '100000']
+    env:
+    - name: COURSE_NAME
+      valueFrom:
+        configMapKeyRef:
+          key: NAME 
+          name: course-config
+...
