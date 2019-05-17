@@ -1,0 +1,60 @@
+- include: pre-requisites.yml
+
+- name: Add student user 
+  user:
+    name: "{{APP_USER}}"
+    state: present 
+
+- name: DOwnload and extract tomcat.
+  unarchive:
+    src: "{{TOMCAT_URL}}"
+    dest: /home/student
+    remote_src: yes
+  become_user: "{{APP_USER}}"
+
+- name: Find old war file 
+  find:
+    paths: "{{TOMCAT_DIR}}/webapps"
+    file_type: any 
+    patterns: 'student*'
+  register: out  
+
+- name: Remove old war files if any 
+  file:
+    path: "{{item.path}}"
+    state: absent
+  loop: "{{out.files}}"
+
+- name: Download war file 
+  get_url:
+    url: "{{WAR_URL}}"
+    dest: "{{TOMCAT_DIR}}/webapps/student.war"
+  become_user: "{{APP_USER}}"
+
+- name: Download the JDBC jar file 
+  get_url:
+    url: "{{JDBC_JAR_URL}}"
+    dest: "{{TOMCAT_DIR}}/lib/mysql-jdbc.jar"
+  become_user: "{{APP_USER}}"
+
+- name: Update JDBC Connection 
+  template:
+    src: context.xml.j2
+    dest: "{{TOMCAT_DIR}}/conf/context.xml"
+  become_user: "{{APP_USER}}"
+  
+- name: Setup tomcat init script 
+  get_url: 
+    url:  "{{TOMCAT_INIT_URL}}"
+    dest: /etc/init.d/tomcat
+    mode: 0755 
+
+- name: Reload systemctld 
+  shell: systemctl daemon-reload
+
+- name: Restart tomcat service 
+  service:
+    name: tomcat 
+    state: restarted
+
+

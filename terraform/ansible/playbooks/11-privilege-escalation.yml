@@ -1,0 +1,8 @@
+- name: demo on privileges
+  hosts: TEST 
+  become: yes
+  tasks:
+    - name: Install package 
+      package:
+        name: httpd 
+        state: present

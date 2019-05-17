@@ -1,0 +1,6 @@
+- name: Demo on conditions using when 
+  hosts: TEST 
+  tasks:
+    - name: Run uptime 
+      shell: uptime 
+      when: ansible_distribution == "CentOS" and ansible_distribution_major_version == 6 

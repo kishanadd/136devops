@@ -1,0 +1,4 @@
+- name: Demo on role dependency 
+  hosts: TEST 
+  roles: 
+    - role2

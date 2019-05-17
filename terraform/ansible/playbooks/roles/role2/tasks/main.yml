@@ -1,0 +1,3 @@
+- name: Task from Role2 
+  debug:
+    msg: "Hell from Role2"

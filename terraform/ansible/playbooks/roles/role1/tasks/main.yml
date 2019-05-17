@@ -1,0 +1,6 @@
+- name: Running role1 module 
+  debug:
+    msg: "Helloo from role1"
+- name: URL 
+  debug: 
+    msg: "URL = {{URL}}"

@@ -1,0 +1,14 @@
+- name: Demo on tags 
+  hosts: TEST 
+  tasks:
+    - name: Run httpd related tasks 
+      debug:
+        msg: "Running HTTPD "
+      tags:
+        - httpd 
+    - name: Run tomcat related tasks 
+      debug:
+        msg: "RUnning Tomcat"
+      tags:
+        - tomcat
+# ansible-playbook playbooks/10-tags.yml -t tomcat,httpd 

@@ -1,0 +1,17 @@
+- name: Copy template 
+  hosts: TEST 
+  vars:
+    URL: google.com
+  tasks:
+    - copy:
+        src: /tmp/sample.txt 
+        dest: /tmp/copy.txt
+    - template:  
+        src: /tmp/sample.txt 
+        dest: /tmp/sample.txt 
+      vars:
+        users:
+          - url: google.com
+            username: demo
+          - url: yahoo.com
+            username: demo1

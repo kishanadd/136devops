@@ -1,0 +1,26 @@
+- name: Install Web Service 
+  package: 
+    name: httpd 
+    state: installed 
+  notify: restart
+
+- name: Run handlers
+  meta: flush_handlers
+
+- name: Setup proxy configuration 
+  copy:
+    src: proxy.conf
+    dest: /etc/httpd/conf.d/proxy.conf 
+  notify: web-restart
+
+- name: Setup default index file 
+  get_url:
+    url: https://s3-us-west-2.amazonaws.com/studentapi-cit/index.html
+    dest: /var/www/html/index.html
+    
+- name: REstart httpd service 
+  service: 
+    name: httpd 
+    state: restarted 
+    enabled: yes
+

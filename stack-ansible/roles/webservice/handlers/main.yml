@@ -1,0 +1,8 @@
+- name: Restart Web Service 
+  service:
+    name: httpd
+    state: restarted 
+    enabled: yes
+  listen: 
+  - "web-restart"
+  - "restart"

@@ -1,0 +1,14 @@
+- name: Install Web and Application for Student Project 
+  hosts: TEST 
+  become: yes
+  tasks:
+    - name: Include Web Service 
+      include_role: 
+        name: webservice
+      when: ansible_os_family == "RedHat"
+      
+    - name: Include App Service 
+      include_role: 
+        name: appservice
+      when: ansible_os_family == "RedHat"
+

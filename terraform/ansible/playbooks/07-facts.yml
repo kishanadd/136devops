@@ -1,0 +1,11 @@
+- name: Demo on default facts and local facts (node facts)
+  hosts: TEST 
+  gather_facts: yes 
+  tasks:
+    - name: Print default variable 
+      debug: 
+       msg: "name = {{ansible_hostname}}"
+       
+    - name: Gather local facts 
+      debug:
+        msg: "{{ansible_local}}"

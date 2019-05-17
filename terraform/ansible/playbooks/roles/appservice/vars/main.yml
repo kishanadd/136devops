@@ -1,0 +1,15 @@
+APP_USER: student
+TOMCAT_VERSION: 8.5.38
+TOMCAT_URL: https://archive.apache.org/dist/tomcat/tomcat-8/v{{TOMCAT_VERSION}}/bin/apache-tomcat-{{TOMCAT_VERSION}}.tar.gz
+TAR_FILE: "{{TOMCAT_URL.split('/') | last }}"
+TAR_DIR: "{{ TAR_FILE | regex_replace('.tar.gz') }}"
+TOMCAT_DIR: "/home/{{APP_USER}}/{{TAR_DIR}}"
+WAR_URL: https://s3-us-west-2.amazonaws.com/studentapi-cit/student.war
+JDBC_JAR_URL: https://s3-us-west-2.amazonaws.com/studentapi-cit/mysql-connector.jar
+TOMCAT_INIT_URL: https://s3-us-west-2.amazonaws.com/studentapi-cit/tomcat-init
+
+## DB DEtails 
+DBUSER: dummy 
+DBPASS: dummy 
+DBHOST: dummy 
+DBNAME: DUMMY

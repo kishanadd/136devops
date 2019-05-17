@@ -1,0 +1,7 @@
+## Debug module 
+- name: Demo on Debug module 
+  hosts: all 
+  tasks:
+    - name: Print Sample 
+      debug:
+        msg: "Sample"

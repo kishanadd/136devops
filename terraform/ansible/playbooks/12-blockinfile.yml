@@ -1,0 +1,10 @@
+- name: demo on blockinfile module 
+  hosts: TEST 
+  tasks:
+    - name: add a block to file 
+      blockinfile:
+        path: /tmp/block.txt
+        create: yes
+        block: |
+          Hello World 
+          One more line 

@@ -1,0 +1,14 @@
+[TEST]
+172.31.29.117 URL=host.google.com # ansible_ssh_private_key_file=/tmp/devops.pem
+#172.31.45.216 ansible_user=ubuntu
+
+## TEST is a group , Nodes under TEST belongs to TEST until another group is defined
+
+[TEST1]
+192.168.1.20
+
+# In a case if you need both the groups then ansible inventory file supports group of groups. 
+
+[test:children]
+TEST 
+TEST1

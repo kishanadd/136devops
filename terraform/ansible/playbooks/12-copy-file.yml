@@ -1,0 +1,7 @@
+- name: Demo on copying a file 
+  hosts: TEST 
+  tasks:
+    - name: Copy file 
+      copy:
+        src: /tmp/abc.txt 
+        dest: /tmp/abc.txt 

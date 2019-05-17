@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: role1
+    vars:
+      URL: role2.google.com

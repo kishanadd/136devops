@@ -1,0 +1,18 @@
+- name: Variables in play level 
+  hosts: all
+  vars:
+    URL: play.google.com
+  tasks:
+    - name: Print URL of play 
+      debug:
+        msg: "URL = {{URL}}"
+
+    - name: Print URL of task variable 
+      ## Variable can declared in task level also, If it is in play level then all tasks can access that variable , If it is task level then only that task can acces that variable 
+      vars:
+        URL: task.google.com 
+      debug:
+        msg: "URL = {{URL}}"
+
+## Run the same playbook by providing URL variable 
+# ansible-playbook -e URL=cli.google.com playbooks/03-vars.yml 

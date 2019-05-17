@@ -1,0 +1,9 @@
+- name: Loops
+  hosts: TEST 
+  tasks:
+    - name: Print multiple values 
+      debug:
+        msg: "{{item}}"
+      loop:
+        - HTTPD
+        - TOMCAT 
